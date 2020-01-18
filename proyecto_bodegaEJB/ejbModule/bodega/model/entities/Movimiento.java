@@ -10,26 +10,28 @@ import java.util.Date;
  * 
  */
 @Entity
+@Table(name="movimiento")
 @NamedQuery(name="Movimiento.findAll", query="SELECT m FROM Movimiento m")
 public class Movimiento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="MOVIMIENTO_IDMOVIM_GENERATOR", sequenceName="MOVIMIENTO",allocationSize = 1)
+	@SequenceGenerator(name="MOVIMIENTO_IDMOVIM_GENERATOR", sequenceName="movimiento_id_movim_seq",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MOVIMIENTO_IDMOVIM_GENERATOR")
-	@Column(name="id_movim")
+	@Column(name="id_movim", unique=true, nullable=false)
 	private Integer idMovim;
 
-	@Column(name="cantidad_movim")
+	@Column(name="cantidad_movim", nullable=false)
 	private Integer cantidadMovim;
 
+	@Column(length=80)
 	private String comentario;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_movim")
+	@Column(name="fecha_movim", nullable=false)
 	private Date fechaMovim;
 
-	@Column(name="orden_compra_o_factura_movim")
+	@Column(name="orden_compra_o_factura_movim", length=10)
 	private String ordenCompraOFacturaMovim;
 
 	//bi-directional many-to-one association to Bodega

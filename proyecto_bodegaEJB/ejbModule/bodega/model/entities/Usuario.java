@@ -10,42 +10,43 @@ import java.util.Date;
  * 
  */
 @Entity
+@Table(name="usuario")
 @NamedQuery(name="Usuario.findAll", query="SELECT u FROM Usuario u")
 public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="USUARIO_IDUSUARIO_GENERATOR", sequenceName="USUARIO",allocationSize = 1)
+	@SequenceGenerator(name="USUARIO_IDUSUARIO_GENERATOR", sequenceName="usuario_id_usuario_seq",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USUARIO_IDUSUARIO_GENERATOR")
-	@Column(name="id_usuario")
+	@Column(name="id_usuario", unique=true, nullable=false)
 	private Integer idUsuario;
 
-	@Column(name="apellido_usuario")
+	@Column(name="apellido_usuario", nullable=false, length=60)
 	private String apellidoUsuario;
 
-	@Column(name="cedula_usuario")
+	@Column(name="cedula_usuario", nullable=false, length=13)
 	private String cedulaUsuario;
 
-	@Column(name="clave_usuario")
+	@Column(name="clave_usuario", nullable=false, length=30)
 	private String claveUsuario;
 
-	@Column(name="correo_usuario")
+	@Column(name="correo_usuario", nullable=false, length=120)
 	private String correoUsuario;
 
-	@Column(name="direccion_usuario")
+	@Column(name="direccion_usuario", length=220)
 	private String direccionUsuario;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_nac_usuario")
 	private Date fechaNacUsuario;
 
-	@Column(name="imagen_usuario")
+	@Column(name="imagen_usuario", length=2147483647)
 	private String imagenUsuario;
 
-	@Column(name="nombre_usuario")
+	@Column(name="nombre_usuario", nullable=false, length=60)
 	private String nombreUsuario;
 
-	@Column(name="telefono_usuario")
+	@Column(name="telefono_usuario", length=15)
 	private String telefonoUsuario;
 
 	//bi-directional many-to-one association to Genero

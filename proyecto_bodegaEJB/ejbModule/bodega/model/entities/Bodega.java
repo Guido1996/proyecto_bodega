@@ -10,20 +10,21 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="bodega")
 @NamedQuery(name="Bodega.findAll", query="SELECT b FROM Bodega b")
 public class Bodega implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="BODEGA_IDBODEGA_GENERATOR", sequenceName="BODEGA",allocationSize = 1)
+	@SequenceGenerator(name="BODEGA_IDBODEGA_GENERATOR", sequenceName="bodega_id_bodega_seq",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BODEGA_IDBODEGA_GENERATOR")
-	@Column(name="id_bodega")
+	@Column(name="id_bodega", unique=true, nullable=false)
 	private Integer idBodega;
 
-	@Column(name="direccion_bodega")
+	@Column(name="direccion_bodega", length=220)
 	private String direccionBodega;
 
-	@Column(name="nombre_bodega")
+	@Column(name="nombre_bodega", nullable=false, length=50)
 	private String nombreBodega;
 
 	//bi-directional many-to-one association to PuntoVenta

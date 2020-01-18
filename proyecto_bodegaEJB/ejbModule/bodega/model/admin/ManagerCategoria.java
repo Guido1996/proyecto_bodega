@@ -2,12 +2,15 @@ package bodega.model.admin;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import bodega.model.entities.Categoria;
+import bodega.model.manager.ManagerDAO;
 
 /**
  * Session Bean implementation class ManagerCategoria
@@ -19,7 +22,10 @@ public class ManagerCategoria {
     /**
      * Default constructor. 
      */
+	@PersistenceContext
 	private EntityManager em;
+@EJB
+private ManagerDAO managerDAO;
 	
     public ManagerCategoria() {
         // TODO Auto-generated constructor stub
@@ -27,10 +33,8 @@ public class ManagerCategoria {
     
     @SuppressWarnings("unchecked")
 	public List<Categoria>findAllCategorias() throws Exception{
-    	try {
-    		String c="SELECT c FROM Categoria c";
-        	Query q = em.createQuery(c,Categoria.class);
-        	return q.getResultList();
+    	try {        	
+        	return managerDAO.findAll(Categoria.class);
 		} catch (Exception e) {
 			throw new Exception("No existe registro de categorias");
 		}
@@ -38,9 +42,19 @@ public class ManagerCategoria {
     }
  
     public Categoria findByIdCategoria(Integer id) {
-    	Categoria c=em.find(Categoria.class, id);
-    	return c;
     	
+    	try {
+			return (Categoria) managerDAO.findById(Categoria.class, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+    	
+    }
+    
+    public void insertarCategoria(Categoria cat) throws Exception {
+    	//managerDAO.insertar(cat);
+    	em.merge(cat);
     }
     
     public void actualizarCategoria(Categoria cat)throws Exception{
@@ -51,16 +65,15 @@ public class ManagerCategoria {
 		} else {
 			c.setNombreCategoria(cat.getNombreCategoria());
 			c.setEstadoCategoria(cat.getEstadoCategoria());
-			em.merge(c);
+			managerDAO.actualizar(c);
 		}
     	
     }
     
-    public void eliminarCategoria(Integer id) {
-    	Categoria c=findByIdCategoria(id);
-    	if (c!=null) {
-			em.remove(c);
-		}
+    public void eliminarCategoria(Integer id) throws Exception {
+    	
+			managerDAO.eliminar(Categoria.class, id);
+	
     }
     
 }

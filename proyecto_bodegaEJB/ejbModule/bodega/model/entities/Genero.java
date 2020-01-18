@@ -10,17 +10,18 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="genero")
 @NamedQuery(name="Genero.findAll", query="SELECT g FROM Genero g")
 public class Genero implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="GENERO_IDGENERO_GENERATOR", sequenceName="GENERO",allocationSize = 1)
+	@SequenceGenerator(name="GENERO_IDGENERO_GENERATOR", sequenceName="genero_id_genero_seq",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="GENERO_IDGENERO_GENERATOR")
-	@Column(name="id_genero")
+	@Column(name="id_genero", unique=true, nullable=false)
 	private Integer idGenero;
 
-	@Column(name="tipo_genero")
+	@Column(name="tipo_genero", nullable=false, length=30)
 	private String tipoGenero;
 
 	//bi-directional many-to-one association to Usuario

@@ -10,24 +10,25 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="categoria")
 @NamedQuery(name="Categoria.findAll", query="SELECT c FROM Categoria c")
 public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="CATEGORIA_IDCATEGORIA_GENERATOR", sequenceName="CATEGORIA",allocationSize = 1)
+	@SequenceGenerator(name="CATEGORIA_IDCATEGORIA_GENERATOR", sequenceName="categoria_id_categoria_seq",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CATEGORIA_IDCATEGORIA_GENERATOR")
-	@Column(name="id_categoria")
+	@Column(name="id_categoria", unique=true, nullable=false)
 	private Integer idCategoria;
 
-	@Column(name="estado_categoria")
+	@Column(name="estado_categoria", nullable=false)
 	private Boolean estadoCategoria;
 
-	@Column(name="nombre_categoria")
+	@Column(name="nombre_categoria", nullable=false, length=45)
 	private String nombreCategoria;
 
 	//bi-directional many-to-one association to Producto
-	@OneToMany(mappedBy="categoria")
+	@OneToMany(mappedBy="categoria", cascade = {CascadeType.MERGE})
 	private List<Producto> productos;
 
 	public Categoria() {

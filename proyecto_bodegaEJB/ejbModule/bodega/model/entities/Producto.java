@@ -11,38 +11,39 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="producto")
 @NamedQuery(name="Producto.findAll", query="SELECT p FROM Producto p")
 public class Producto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="PRODUCTO_IDPRODUCTO_GENERATOR", sequenceName="PRODUCTO",allocationSize = 1)
+	@SequenceGenerator(name="PRODUCTO_IDPRODUCTO_GENERATOR", sequenceName="producto_id_producto_seq",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PRODUCTO_IDPRODUCTO_GENERATOR")
-	@Column(name="id_producto")
+	@Column(name="id_producto", unique=true, nullable=false)
 	private Integer idProducto;
 
-	@Column(name="cantidad_stock_producto")
+	@Column(name="cantidad_stock_producto", nullable=false)
 	private Integer cantidadStockProducto;
 
-	@Column(name="caracteristicas_producto")
+	@Column(name="caracteristicas_producto", length=2147483647)
 	private String caracteristicasProducto;
 
-	@Column(name="costo_producto")
+	@Column(name="costo_producto", nullable=false, precision=5, scale=2)
 	private BigDecimal costoProducto;
 
-	@Column(name="descripcion_producto")
+	@Column(name="descripcion_producto", length=250)
 	private String descripcionProducto;
 
-	@Column(name="estado_producto")
+	@Column(name="estado_producto", nullable=false)
 	private Boolean estadoProducto;
 
-	@Column(name="imagen_producto")
+	@Column(name="imagen_producto", length=2147483647)
 	private String imagenProducto;
 
-	@Column(name="nombre_producto")
+	@Column(name="nombre_producto", nullable=false, length=50)
 	private String nombreProducto;
 
-	@Column(name="precio_base_producto")
+	@Column(name="precio_base_producto", nullable=false, precision=5, scale=2)
 	private BigDecimal precioBaseProducto;
 
 	//bi-directional many-to-one association to Movimiento
