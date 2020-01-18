@@ -76,7 +76,7 @@ public class BeanCategoria implements Serializable {
 		try {
 			if (categoria.getNombreCategoria().length()>0) {
 				Categoria c=new Categoria();
-				c.setEstadoCategoria(true);
+				c.setEstadoCategoria(categoria.getEstadoCategoria());
 				c.setNombreCategoria(categoria.getNombreCategoria());
 				managerCategoria.insertarCategoria(c);
 				listaCategoria=managerCategoria.findAllCategorias();

@@ -12,9 +12,9 @@
 	</p:growl>
 <p:panel header="Crud">
 	<h:form id="form">
-	<p:commandButton icon="ui-icon-plus" style="margin-right: 90%;"
-										value="Nuevo" action="#{beanCategoria.limpiarCategoria()}"
-										title="Nuevo Bien" oncomplete="PF('dlgCrear').show();">
+	<p:commandButton icon="fa fa-plus-square" style="margin-right: 90%;"
+										value="  Nuevo" action="#{beanCategoria.limpiarCategoria()}"
+										title="Nueva categoría" oncomplete="PF('dlgCrear').show();">
 	</p:commandButton>
 	<br />
 	<br />
@@ -23,15 +23,15 @@
 	 		<h:outputText value="#{c.nombreCategoria}" />
 	 	</p:column>
 	  <p:column headerText="Estado ">
-	 		<h:outputText value="#{c.estadoCategoria}" />
+	 		<h:outputText value="#{c.estadoCategoria=='true'?'Activo':'Inactivo'}" />
 	 	</p:column>
 	 	<p:column headerText="Opciones">
-	 	<p:commandButton icon="fa fa-edit" update=":formEditar" actionListener="#{beanCategoria.actionListenerCargarCategoria(c)}"
+	 	<p:commandButton icon="fa fa-edit" update=":formEditar" title="Editar" actionListener="#{beanCategoria.actionListenerCargarCategoria(c)}"
 	 	oncomplete="PF('dlgEditar').show();"
 	 	>
 	 	</p:commandButton>
 	 	
-	 	<p:commandButton update="form" icon="fa fa-trash" actionListener="#{beanCategoria.actionListenerEliminarCategoria(c.idCategoria)}">
+	 	<p:commandButton update="form" icon="fa fa-trash"  title="Eliminar" actionListener="#{beanCategoria.actionListenerEliminarCategoria(c.idCategoria)}">
 	 	<p:confirm header="Confirmación" message="¿Desea eliminar?"
 			icon="fa fa-info"></p:confirm>
 	 	</p:commandButton>
@@ -55,7 +55,13 @@
 				required="true">
 			
 			</p:inputText>
-	
+			<h:outputText value="Estado" />
+			<p:selectOneRadio id="estado" value="#{beanCategoria.categoria.estadoCategoria}"
+								required="true" requiredMessage="Estado requerido"
+								unselectable="true">
+								<f:selectItem itemLabel="Activo" itemValue="true" />
+								<f:selectItem itemLabel="Inactivo" itemValue="false" />
+							</p:selectOneRadio>
 	</p:panelGrid>
 		<br />
 			<p:commandButton value="Crear" update="form"
@@ -73,13 +79,19 @@
 	</p:growl>
 
 	<p:panelGrid columns="2">
-		<h:outputText value="Nombre Categoría]" />
+		<h:outputText value="Nombre Categoría" />
 			<p:inputText value="#{beanCategoria.categoria.nombreCategoria}"
 				requiredMessage="El Nombre Categoría es requerido"
 				required="true">
 			
 			</p:inputText>
-	
+			<h:outputText value="Estado" />
+		<p:selectOneRadio id="estado" value="#{beanCategoria.categoria.estadoCategoria}"
+								required="true" requiredMessage="Estado requerido"
+								unselectable="true">
+								<f:selectItem itemLabel="Activo" itemValue="true" />
+								<f:selectItem itemLabel="Inactivo" itemValue="false" />
+		</p:selectOneRadio>
 	</p:panelGrid>
 		<br />
 			<p:commandButton value="Actualizar" update="form"
