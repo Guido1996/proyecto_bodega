@@ -16,7 +16,7 @@ public class Movimiento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="MOVIMIENTO_IDMOVIM_GENERATOR", sequenceName="movimiento_id_movim_seq",allocationSize = 1)
+	@SequenceGenerator(name="MOVIMIENTO_IDMOVIM_GENERATOR", sequenceName="MOVIMIENTO_ID_MOVIM_SEQ",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MOVIMIENTO_IDMOVIM_GENERATOR")
 	@Column(name="id_movim", unique=true, nullable=false)
 	private Integer idMovim;

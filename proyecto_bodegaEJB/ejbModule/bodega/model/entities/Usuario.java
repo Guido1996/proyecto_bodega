@@ -3,6 +3,7 @@ package bodega.model.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -16,7 +17,7 @@ public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="USUARIO_IDUSUARIO_GENERATOR", sequenceName="usuario_id_usuario_seq",allocationSize = 1)
+	@SequenceGenerator(name="USUARIO_IDUSUARIO_GENERATOR", sequenceName="USUARIO_ID_USUARIO_SEQ",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USUARIO_IDUSUARIO_GENERATOR")
 	@Column(name="id_usuario", unique=true, nullable=false)
 	private Integer idUsuario;
@@ -48,6 +49,10 @@ public class Usuario implements Serializable {
 
 	@Column(name="telefono_usuario", length=15)
 	private String telefonoUsuario;
+
+	//bi-directional many-to-one association to Bodega
+	@OneToMany(mappedBy="usuario")
+	private List<Bodega> bodegas;
 
 	//bi-directional many-to-one association to Genero
 	@ManyToOne
@@ -140,6 +145,28 @@ public class Usuario implements Serializable {
 
 	public void setTelefonoUsuario(String telefonoUsuario) {
 		this.telefonoUsuario = telefonoUsuario;
+	}
+
+	public List<Bodega> getBodegas() {
+		return this.bodegas;
+	}
+
+	public void setBodegas(List<Bodega> bodegas) {
+		this.bodegas = bodegas;
+	}
+
+	public Bodega addBodega(Bodega bodega) {
+		getBodegas().add(bodega);
+		bodega.setUsuario(this);
+
+		return bodega;
+	}
+
+	public Bodega removeBodega(Bodega bodega) {
+		getBodegas().remove(bodega);
+		bodega.setUsuario(null);
+
+		return bodega;
 	}
 
 	public Genero getGenero() {

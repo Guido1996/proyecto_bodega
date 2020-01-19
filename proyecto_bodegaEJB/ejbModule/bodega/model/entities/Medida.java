@@ -16,7 +16,7 @@ public class Medida implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="MEDIDA_IDMEDIDA_GENERATOR", sequenceName="medida_id_medida_seq",allocationSize = 1)
+	@SequenceGenerator(name="MEDIDA_IDMEDIDA_GENERATOR", sequenceName="MEDIDA_ID_MEDIDA_SEQ",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MEDIDA_IDMEDIDA_GENERATOR")
 	@Column(name="id_medida", unique=true, nullable=false)
 	private Integer idMedida;

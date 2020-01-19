@@ -16,7 +16,7 @@ public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="CATEGORIA_IDCATEGORIA_GENERATOR", sequenceName="categoria_id_categoria_seq",allocationSize = 1)
+	@SequenceGenerator(name="CATEGORIA_IDCATEGORIA_GENERATOR", sequenceName="CATEGORIA_ID_CATEGORIA_SEQ",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CATEGORIA_IDCATEGORIA_GENERATOR")
 	@Column(name="id_categoria", unique=true, nullable=false)
 	private Integer idCategoria;
@@ -28,7 +28,7 @@ public class Categoria implements Serializable {
 	private String nombreCategoria;
 
 	//bi-directional many-to-one association to Producto
-	@OneToMany(mappedBy="categoria", cascade = {CascadeType.MERGE})
+	@OneToMany(mappedBy="categoria")
 	private List<Producto> productos;
 
 	public Categoria() {

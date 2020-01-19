@@ -16,7 +16,7 @@ public class PuntoVenta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="PUNTO_VENTA_IDPTOVENTA_GENERATOR", sequenceName="punto_venta_id_pto_venta_seq",allocationSize = 1)
+	@SequenceGenerator(name="PUNTO_VENTA_IDPTOVENTA_GENERATOR", sequenceName="PUNTO_VENTA_ID_PTO_VENTA_SEQ",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PUNTO_VENTA_IDPTOVENTA_GENERATOR")
 	@Column(name="id_pto_venta", unique=true, nullable=false)
 	private Integer idPtoVenta;

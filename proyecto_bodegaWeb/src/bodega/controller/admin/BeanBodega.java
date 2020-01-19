@@ -10,8 +10,10 @@ import javax.inject.Named;
 
 import bodega.model.admin.ManagerBodega;
 import bodega.model.admin.ManagerPuntoVenta;
+import bodega.model.admin.ManagerUsuario;
 import bodega.model.entities.Bodega;
 import bodega.model.entities.PuntoVenta;
+import bodega.model.entities.Usuario;
 
 @Named
 @SessionScoped
@@ -22,56 +24,72 @@ public class BeanBodega implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private List<Bodega> listaBodega;
+	private List<PuntoVenta> listaPuntoVenta;
+	private List<Usuario> listaUsuario;
 	@EJB
 	private ManagerBodega managerBodega;
 	
 	@EJB
 	private ManagerPuntoVenta managerPv;
+	
+	@EJB
+	private ManagerUsuario managerUser;
+	
 	private Bodega bodega;
+	private Usuario user;
 	private PuntoVenta puntoVenta;
+	private Integer idUser;
+	private Integer idPuntoVenta;
 
 	@PostConstruct
 	public void inicializar() {
 		try {
 			listaBodega = managerBodega.findAllBodega();
+			listaPuntoVenta=managerPv.findAllPuntoVenta();
+			listaUsuario=managerUser.findAllUsuarios();
 		} catch (Exception e) {
 			JSFUtil.crearMensajeError(e.getMessage());
 		}
 		bodega = new Bodega();
+	
 	}
 
 	public void actionListenerCargarBodega(Bodega bod) {
 		try {
 			bodega=new Bodega();
 			puntoVenta=managerPv.findByIdPuntoVenta(bod.getPuntoVenta().getIdPtoVenta());
+			user=managerUser.findByIdUsuario(bod.getUsuario().getIdUsuario());
 			bodega.setDireccionBodega(bod.getDireccionBodega());
 			bodega.setNombreBodega(bod.getNombreBodega());
+			bodega.setIdBodega(bod.getIdBodega());
 			bodega.setPuntoVenta(puntoVenta);
-				///falta el usuario
+			bodega.setUsuario(user);
+			setIdPuntoVenta(idPuntoVenta);
+			setIdUser(idUser);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			JSFUtil.crearMensajeError("No se ha podido cargar su bodega");
 		}
 	}
-/*
-	public void actionListenerActualizarPuntoVenta() {
+
+	public void actionListenerActualizarBodega() {
 		try {
-			if (puntoVenta.getNombrePtoVenta().length() > 0 && !puntoVenta.getCorreoPtoVenta().isEmpty()) {
-				if (puntoVenta.getCorreoPtoVenta().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
-				PuntoVenta pv = managerpv.findByIdPuntoVenta(puntoVenta.getIdPtoVenta());
-				pv.setCorreoPtoVenta(puntoVenta.getCorreoPtoVenta());
-				pv.setDireccionPtoVenta(puntoVenta.getDireccionPtoVenta());
-				pv.setNombrePtoVenta(puntoVenta.getNombrePtoVenta());
-				pv.setTelefonoPtoVenta(puntoVenta.getTelefonoPtoVenta());
-				managerpv.actualizarPuntoVenta(pv);
-				listapv = managerpv.findAllPuntoVenta();
+			if (bodega.getNombreBodega().length() > 0 && !bodega.getDireccionBodega().isEmpty()) {
+				Bodega b=managerBodega.findByIdBodega(bodega.getIdBodega());
+				b.setDireccionBodega(bodega.getDireccionBodega());
+				b.setNombreBodega(bodega.getNombreBodega());
+				Usuario user=managerUser.findByIdUsuario(idUser);
+				b.setUsuario(user);
+				PuntoVenta pv=managerPv.findByIdPuntoVenta(idPuntoVenta);
+				b.setPuntoVenta(pv);
+				managerBodega.actualizarBodega(b);
+				
+				listaBodega=managerBodega.findAllBodega();
 				JSFUtil.crearMensajeInfo("Actualizado con éxito");
-				} else {
-					JSFUtil.crearMensajeError("Debe ingresar un correo válido");
-				}
+				
 			} else {
-				JSFUtil.crearMensajeError("Debe ingresar el nombre del punto de venta");
+				JSFUtil.crearMensajeError("Debe ingresar todos los campos");
 			}
 
 		} catch (Exception e) {
@@ -80,62 +98,72 @@ public class BeanBodega implements Serializable {
 
 	}
 
-	public void limpiarPuntoVenta() {
-		puntoVenta.setCorreoPtoVenta("");
-		puntoVenta.setDireccionPtoVenta("");
-		puntoVenta.setNombrePtoVenta("");
-		puntoVenta.setTelefonoPtoVenta("");
+	public void limpiarBodega() {
+		bodega.setDireccionBodega("");
+		bodega.setNombreBodega("");
+		
 	}
 
-	public void actionListenerInsertarPuntoVenta() {
+	public void actionListenerInsertarBodega() {
 		try {
-			if (puntoVenta.getNombrePtoVenta().length() > 0 && !puntoVenta.getCorreoPtoVenta().isEmpty()) {
-				if (puntoVenta.getCorreoPtoVenta().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
-
-					PuntoVenta pv = new PuntoVenta();
-					pv.setCorreoPtoVenta(puntoVenta.getCorreoPtoVenta());
-					pv.setDireccionPtoVenta(puntoVenta.getDireccionPtoVenta());
-					pv.setNombrePtoVenta(puntoVenta.getNombrePtoVenta());
-					pv.setTelefonoPtoVenta(puntoVenta.getTelefonoPtoVenta());
-					managerpv.insertarPuntoVenta(pv);
-					listapv = managerpv.findAllPuntoVenta();
-					limpiarPuntoVenta();
-					JSFUtil.crearMensajeInfo("Insertado con éxito");
-
-				} else {
-					JSFUtil.crearMensajeError("Debe ingresar un correo válido");
-				}
+			if (bodega.getNombreBodega().length() > 0 && !bodega.getDireccionBodega().isEmpty()) {
+				Bodega b=new Bodega();
+				b.setDireccionBodega(bodega.getDireccionBodega());
+				b.setNombreBodega(bodega.getNombreBodega());
+				Usuario user=managerUser.findByIdUsuario(idUser);
+				b.setUsuario(user);
+				PuntoVenta pv=managerPv.findByIdPuntoVenta(idPuntoVenta);
+				b.setPuntoVenta(pv);
+				managerBodega.insertarBodega(b);
+				
+				listaBodega=managerBodega.findAllBodega();
+				limpiarBodega();
+				JSFUtil.crearMensajeInfo("Insertado con éxito");
 			} else {
 				JSFUtil.crearMensajeError("Debe ingresar todos los campos");
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+		
 			e.printStackTrace();
 			JSFUtil.crearMensajeError("Error al crear");
 		}
 
 	}
 
-	public void actionListenerEliminarPuntoVenta(Integer id) {
+	public void actionListenerEliminarUsuario(Integer id) {
 		try {
-			managerpv.eliminarPuntoVenta(id);
-			listapv = managerpv.findAllPuntoVenta();
-			JSFUtil.crearMensajeInfo("Su punto de venta ha sido eliminado");
+			managerBodega.eliminarBodega(id);
+			listaBodega=managerBodega.findAllBodega();
+			JSFUtil.crearMensajeInfo("Su punto bodega ha sido eliminada");
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			JSFUtil.crearMensajeError("Error al eliminar");
 		}
-
 	}
 
-	public List<PuntoVenta> getListapv() {
-		return listapv;
+	public List<Bodega> getListaBodega() {
+		return listaBodega;
 	}
 
-	public void setListapv(List<PuntoVenta> listapv) {
-		this.listapv = listapv;
+	public void setListaBodega(List<Bodega> listaBodega) {
+		this.listaBodega = listaBodega;
+	}
+
+	public Bodega getBodega() {
+		return bodega;
+	}
+
+	public void setBodega(Bodega bodega) {
+		this.bodega = bodega;
+	}
+
+	public Usuario getUser() {
+		return user;
+	}
+
+	public void setUser(Usuario user) {
+		this.user = user;
 	}
 
 	public PuntoVenta getPuntoVenta() {
@@ -145,5 +173,38 @@ public class BeanBodega implements Serializable {
 	public void setPuntoVenta(PuntoVenta puntoVenta) {
 		this.puntoVenta = puntoVenta;
 	}
-*/
+
+	public Integer getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(Integer idUser) {
+		this.idUser = idUser;
+	}
+
+	public Integer getIdPuntoVenta() {
+		return idPuntoVenta;
+	}
+
+	public void setIdPuntoVenta(Integer idPuntoVenta) {
+		this.idPuntoVenta = idPuntoVenta;
+	}
+
+	public List<PuntoVenta> getListaPuntoVenta() {
+		return listaPuntoVenta;
+	}
+
+	public void setListaPuntoVenta(List<PuntoVenta> listaPuntoVenta) {
+		this.listaPuntoVenta = listaPuntoVenta;
+	}
+
+	public List<Usuario> getListaUsuario() {
+		return listaUsuario;
+	}
+
+	public void setListaUsuario(List<Usuario> listaUsuario) {
+		this.listaUsuario = listaUsuario;
+	}
+	
+	
 }
